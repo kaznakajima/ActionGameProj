@@ -177,10 +177,13 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 	// 空中判定
 	UCharacterMovementComponent* myMovement = GetCharacterMovement();
 	bool IsAir = (myMovement->MovementMode == EMovementMode::MOVE_Falling);
-	if (IsAir) return;
+
+	// プレイヤーの移動量
+	FVector playerVelocity = GetCharacterMovement()->Velocity;
 
 	// 回避中なら
 	if (isAvoid) {
+		if (IsAir) GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		// 通常状態へ
 		Avoiding = false;
 		// コリジョン有効化
@@ -188,6 +191,7 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 	}
 	// 回避中でないなら
 	else {
+		if (playerVelocity.X == 0 || playerVelocity.Y == 0) return;
 		// 回避状態へ
 		Avoiding = true;
 		// コリジョン無効化
