@@ -191,7 +191,6 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 	}
 	// ‰ñ”ğ’†‚Å‚È‚¢‚È‚ç
 	else {
-		if (playerVelocity.X == 0 || playerVelocity.Y == 0) return;
 		// ‰ñ”ğó‘Ô‚Ö
 		Avoiding = true;
 		// ƒRƒŠƒWƒ‡ƒ“–³Œø‰»
