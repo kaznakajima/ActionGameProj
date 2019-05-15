@@ -183,9 +183,11 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 
 	// 回避中なら
 	if (isAvoid) {
-		if (IsAir) GetCharacterMovement()->Velocity = FVector(0, 0, 0);
+		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		// 通常状態へ
 		Avoiding = false;
+		// 摩擦を戻す
+		GetCharacterMovement()->GroundFriction = 8.0f;
 		// コリジョン有効化
 		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 	}
@@ -193,6 +195,8 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 	else {
 		// 回避状態へ
 		Avoiding = true;
+		// 摩擦を無視
+		GetCharacterMovement()->GroundFriction = 0.0f;
 		// コリジョン無効化
 		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	}
