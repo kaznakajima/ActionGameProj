@@ -102,8 +102,6 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 // 前後移動
 void AActionGameCharacter::MoveForward(float Value)
 {
-	// 移動可能でないならリターン
-	if (CanMove() == false) return;
 
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
@@ -113,6 +111,10 @@ void AActionGameCharacter::MoveForward(float Value)
 
 		// 前後方向ベクターを取得
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// 移動可能でないならリターン
+		if (CanMove() == false) return;
+
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -120,9 +122,6 @@ void AActionGameCharacter::MoveForward(float Value)
 // 左右移動
 void AActionGameCharacter::MoveRight(float Value)
 {
-	// 移動可能でないならリターン
-	if (CanMove() == false) return;
-
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
 		// 左右方向の取得
@@ -131,6 +130,10 @@ void AActionGameCharacter::MoveRight(float Value)
 	
 		// 左右方向ベクターの取得
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// 移動可能でないならリターン
+		if (CanMove() == false) return;
+
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -175,6 +178,8 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 // 回避処理
 void AActionGameCharacter::AvoidAction()
 {
+	Attacking = false;
+
 	// 回避中なら
 	if (Avoiding) {
 		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
@@ -203,8 +208,8 @@ void AActionGameCharacter::AvoidAction()
 // 回避時のダッシュ
 void AActionGameCharacter::AvoidDash()
 {
-	// ダッシュのベクトルの計算
-	FVector DashVec = GetCapsuleComponent()->GetForwardVector() * 3000.0f;
+	// 前方方向のベクター
+	DashVec = GetCapsuleComponent()->GetForwardVector() * 3000.0f;
 	// ダッシュ開始
 	LaunchCharacter(DashVec, true, true);
 	// Timerのセット

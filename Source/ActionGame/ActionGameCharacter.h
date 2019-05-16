@@ -120,7 +120,13 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidAction();
 
+	// ダッシュ方向ベクター
+	UPROPERTY()
+	FVector DashVec;
+	UPROPERTY()
+	float InputValue;
 	// Timerを管理する変数
+	UPROPERTY()
 	FTimerHandle TimeHandle;
 	// 回避時のダッシュ
 	UFUNCTION()
