@@ -118,7 +118,13 @@ protected:
 
 	// ‰ñ”ğˆ—
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
-	void AvoidAction(bool isAvoid);
+	void AvoidAction();
+
+	// Timer‚ğŠÇ—‚·‚é•Ï”
+	FTimerHandle TimeHandle;
+	// ‰ñ”ğ‚Ìƒ_ƒbƒVƒ…
+	UFUNCTION()
+	void AvoidDash();
 
 protected:
 	// APawn interface

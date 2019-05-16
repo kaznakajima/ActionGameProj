@@ -9,6 +9,7 @@
 #include "GameFramework/DamageType.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "MyCharacterMovementComponent.h"
+#include "Engine.h"
 
 AActionGameCharacter::AActionGameCharacter(const FObjectInitializer& ObjectInitilizer) 
 	: Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName))
@@ -172,17 +173,10 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 }
 
 // 回避処理
-void AActionGameCharacter::AvoidAction(bool isAvoid)
+void AActionGameCharacter::AvoidAction()
 {
-	// 空中判定
-	UCharacterMovementComponent* myMovement = GetCharacterMovement();
-	bool IsAir = (myMovement->MovementMode == EMovementMode::MOVE_Falling);
-
-	// プレイヤーの移動量
-	FVector playerVelocity = GetCharacterMovement()->Velocity;
-
 	// 回避中なら
-	if (isAvoid) {
+	if (Avoiding) {
 		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		// 通常状態へ
 		Avoiding = false;
@@ -190,6 +184,8 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 		GetCharacterMovement()->GroundFriction = 8.0f;
 		// コリジョン有効化
 		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+		// Timerのリセット
+		GetWorld()->GetTimerManager().ClearTimer(TimeHandle);
 	}
 	// 回避中でないなら
 	else {
@@ -199,5 +195,18 @@ void AActionGameCharacter::AvoidAction(bool isAvoid)
 		GetCharacterMovement()->GroundFriction = 0.0f;
 		// コリジョン無効化
 		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+		// ダッシュ
+		AvoidDash();
 	}
+}
+
+// 回避時のダッシュ
+void AActionGameCharacter::AvoidDash()
+{
+	// ダッシュのベクトルの計算
+	FVector DashVec = GetCapsuleComponent()->GetForwardVector() * 3000.0f;
+	// ダッシュ開始
+	LaunchCharacter(DashVec, true, true);
+	// Timerのセット
+	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidAction, 0.2f, false);
 }
