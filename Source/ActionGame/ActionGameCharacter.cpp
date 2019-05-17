@@ -102,7 +102,6 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 // 前後移動
 void AActionGameCharacter::MoveForward(float Value)
 {
-
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// 前後方向の取得
@@ -111,6 +110,8 @@ void AActionGameCharacter::MoveForward(float Value)
 
 		// 前後方向ベクターを取得
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		InputVec.X = Value;
 
 		// 移動可能でないならリターン
 		if (CanMove() == false) return;
@@ -130,6 +131,8 @@ void AActionGameCharacter::MoveRight(float Value)
 	
 		// 左右方向ベクターの取得
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		InputVec.Y = Value;
 
 		// 移動可能でないならリターン
 		if (CanMove() == false) return;
@@ -156,9 +159,11 @@ void AActionGameCharacter::GiveDamage(AActor* actor, float defence)
 	// ダメージ計算
 	float damage = MyParam.Power - defence;
 
+	// ダメージイベントの取得
 	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
 	FDamageEvent DamageEvent(ValidDamageTypeClass);
 
+	// ダメージ処理
 	actor->TakeDamage(damage, DamageEvent, PlayerController, this);
 }
 
@@ -178,10 +183,12 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 // 回避処理
 void AActionGameCharacter::AvoidAction()
 {
-	Attacking = false;
+	// 攻撃中なら攻撃中止
+	if(Attacking) Attacking = false;
 
 	// 回避中なら
 	if (Avoiding) {
+		// Velocityのリセット
 		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		// 通常状態へ
 		Avoiding = false;
@@ -208,10 +215,23 @@ void AActionGameCharacter::AvoidAction()
 // 回避時のダッシュ
 void AActionGameCharacter::AvoidDash()
 {
+	// 現在の方向の取得
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// 方向ベクターの取得
+	const FVector DirectionY = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y) * InputVec.Y;
+	const FVector DirectionX = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * InputVec.X;
 	// 前方方向のベクター
-	DashVec = GetCapsuleComponent()->GetForwardVector() * 3000.0f;
+	//DashVec = GetCapsuleComponent()->GetForwardVector() * 3000.0f;
+	DashVec = DirectionY + DirectionX;
+	DashVec.Normalize();
+	// 目標の方向を取得
+	FRotator myRotate = DashVec.Rotation();
+	SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
+
 	// ダッシュ開始
-	LaunchCharacter(DashVec, true, true);
+	LaunchCharacter(DashVec * 3000.0f, true, true);
 	// Timerのセット
 	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidAction, 0.2f, false);
 }

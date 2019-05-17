@@ -124,7 +124,7 @@ protected:
 	UPROPERTY()
 	FVector DashVec;
 	UPROPERTY()
-	float InputValue;
+	FVector InputVec;
 	// Timer‚ğŠÇ—‚·‚é•Ï”
 	UPROPERTY()
 	FTimerHandle TimeHandle;
