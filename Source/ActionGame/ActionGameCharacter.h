@@ -119,10 +119,14 @@ protected:
 	// 回避処理
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidAction();
+	// 回避のキャンセル
+	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
+	void AvoidCancel();
 
 	// ダッシュ方向ベクター
 	UPROPERTY()
 	FVector DashVec;
+	// 入力方向ベクター
 	UPROPERTY()
 	FVector InputVec;
 	// Timerを管理する変数
