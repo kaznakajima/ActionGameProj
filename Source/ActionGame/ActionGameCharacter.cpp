@@ -1,6 +1,7 @@
-// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
-
 #include "ActionGameCharacter.h"
+
+//#include "Public/DirectInputPadJoystick.h"
+
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
