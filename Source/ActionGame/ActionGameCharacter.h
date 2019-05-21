@@ -83,6 +83,9 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	// ジャンプ
+	void Jump();
+
 	/** 
 	 * Called via input to turn at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -100,6 +103,10 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	// ダッシュ攻撃ができるかどうか
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	bool CanDashAttack;
 
 	// 移動できるかどうか返す
 	bool CanMove();

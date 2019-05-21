@@ -1,7 +1,4 @@
 #include "ActionGameCharacter.h"
-
-//#include "Public/DirectInputPadJoystick.h"
-
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -148,6 +145,13 @@ void AActionGameCharacter::MoveRight(float Value)
 	}
 }
 
+void AActionGameCharacter::Jump()
+{
+	if (Avoiding) AvoidCancel();
+	bPressedJump = true;
+	JumpKeyHoldTime = 0.0f;
+}
+
 // 移動可能かどうか返す
 bool AActionGameCharacter::CanMove()
 {
@@ -191,7 +195,7 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 void AActionGameCharacter::AvoidAction()
 {
 	// 回避中なら
-	if (Avoiding) AvoidCancel();
+	if (Avoiding) return;
 	// 回避中でないなら
 	else {
 		// 攻撃中なら攻撃中止
@@ -211,15 +215,27 @@ void AActionGameCharacter::AvoidAction()
 void AActionGameCharacter::AvoidCancel()
 {
 	// Velocityのリセット
-	GetCharacterMovement()->Velocity = FVector(0, 0, 0);
-	// 通常状態へ
-	Avoiding = false;
+	GetCharacterMovement()->Velocity = FVector(0, 0, GetCharacterMovement()->Velocity.Z);
 	// 摩擦を戻す
 	GetCharacterMovement()->GroundFriction = 8.0f;
 	// コリジョン有効化
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
-	// Timerのリセット
+	// Timerの再設定
 	GetWorld()->GetTimerManager().ClearTimer(TimeHandle);
+
+	// 空中判定
+	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
+	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
+
+	// 空中の状態ならリターン
+	if (IsAir) { 
+		// Timerのセット
+		GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false); 
+		return; 
+	}
+
+	// 通常状態へ
+	Avoiding = false;
 }
 
 // 回避時のダッシュ
