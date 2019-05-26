@@ -4,34 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CharacterInterface.h"
 #include "ActionGameCharacter.generated.h"
-
-// キャラクターのステータス
-USTRUCT(BlueprintType)
-struct FCharacterStatus
-{
-	GENERATED_USTRUCT_BODY()
-
-	// キャラクターID
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
-	int ID;
-
-	// キャラクター名
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
-	FText Name;
-
-	// 最大HP
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
-	float MaxHP;
-	
-	// 攻撃力
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
-	float Power;
-	
-	// 守備力
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
-	float Defence;
-};
 
 UCLASS(config=Game)
 class AActionGameCharacter : public ACharacter
@@ -144,9 +118,7 @@ protected:
 	void AvoidDash();
 
 protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
 
 public:
 	/** Returns CameraBoom subobject **/
