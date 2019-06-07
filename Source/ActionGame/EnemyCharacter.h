@@ -22,24 +22,16 @@ public:
 
 	// 攻撃中かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-		bool Attacking;
-
-	// 回避中かどうか
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-		bool Avoiding;
+	bool Attacking;
 
 	// ダメージを受けているか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-		bool Damaging;
+	bool Damaging;
 
 protected:
 
 	// ジャンプ
 	void Jump();
-
-	// ダッシュ攻撃ができるかどうか
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-	bool CanDashAttack;
 
 	// 移動できるかどうか返す
 	bool CanMove();
@@ -56,24 +48,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
 
-	// 回避処理
-	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
-	void AvoidAction();
-	// 回避のキャンセル
-	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
-	void AvoidCancel();
-
-	// ダッシュ方向ベクター
-	UPROPERTY()
-	FVector DashVec;
-	// 入力方向ベクター
-	UPROPERTY()
-	FVector InputVec;
 	// Timerを管理する変数
 	UPROPERTY()
 	FTimerHandle TimeHandle;
-	// 回避時のダッシュ
-	UFUNCTION()
-	void AvoidDash();
-
 };

@@ -30,7 +30,6 @@ AEnemyCharacter::AEnemyCharacter(const FObjectInitializer& ObjectInitilizer)
 
 void AEnemyCharacter::Jump()
 {
-	if (Avoiding) AvoidCancel();
 	bPressedJump = true;
 	JumpKeyHoldTime = 0.0f;
 }
@@ -39,7 +38,7 @@ void AEnemyCharacter::Jump()
 bool AEnemyCharacter::CanMove()
 {
 	// 攻撃中か回避中かダメージを受けている場合はfalse
-	if (Attacking || Avoiding || Damaging) return false;
+	if (Attacking || Damaging) return false;
 
 	// 何もしていないならtrue
 	return true;
@@ -72,82 +71,5 @@ void AEnemyCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, class 
 {
 	boxCol_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-}
-
-// 回避処理
-void AEnemyCharacter::AvoidAction()
-{
-	// 回避中なら
-	if (Avoiding) return;
-	// 回避中でないなら
-	else {
-		// 攻撃中なら攻撃中止
-		if (Attacking) Attacking = false;
-		// 回避状態へ
-		Avoiding = true;
-		// 摩擦を無視
-		GetCharacterMovement()->GroundFriction = 0.0f;
-		// コリジョン無効化
-		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-		// ダッシュ
-		AvoidDash();
-	}
-}
-
-// 回避のキャンセル
-void AEnemyCharacter::AvoidCancel()
-{
-	// Velocityのリセット
-	GetCharacterMovement()->Velocity = FVector(0, 0, GetCharacterMovement()->Velocity.Z);
-	// 摩擦を戻す
-	GetCharacterMovement()->GroundFriction = 8.0f;
-	// コリジョン有効化
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
-	// Timerの再設定
-	GetWorld()->GetTimerManager().ClearTimer(TimeHandle);
-
-	// 空中判定
-	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
-	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
-
-	// 空中の状態ならリターン
-	if (IsAir) {
-		// Timerのセット
-		GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AEnemyCharacter::AvoidCancel, 0.2f, false);
-		return;
-	}
-
-	// 通常状態へ
-	Avoiding = false;
-}
-
-// 回避時のダッシュ
-void AEnemyCharacter::AvoidDash()
-{
-	// 現在の方向の取得
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// 方向ベクターの取得
-	const FVector DirectionY = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y) * InputVec.Y;
-	const FVector DirectionX = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * InputVec.X;
-
-	// 入力状態によってダッシュの方向を決定
-	// 入力がない場合、前方方向にダッシュ
-	if (InputVec.X == 0 && InputVec.Y == 0) DashVec = GetCapsuleComponent()->GetForwardVector();
-	// 入力がある場合、入力方向にダッシュ
-	else if (InputVec.X != 0 || InputVec.Y != 0) {
-		DashVec = DirectionY + DirectionX;
-		DashVec.Normalize();
-
-		// 目標の方向を取得
-		FRotator myRotate = DashVec.Rotation();
-		SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
-	}
-
-	// ダッシュ開始
-	LaunchCharacter(DashVec * 3000.0f, true, true);
-	// Timerのセット
-	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AEnemyCharacter::AvoidCancel, 0.2f, false);
 }
 
