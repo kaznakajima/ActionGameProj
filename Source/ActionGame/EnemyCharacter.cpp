@@ -27,7 +27,6 @@ AEnemyCharacter::AEnemyCharacter(const FObjectInitializer& ObjectInitilizer)
 	GetCharacterMovement()->AirControl = 0.2f;
 }
 
-
 void AEnemyCharacter::Jump()
 {
 	bPressedJump = true;

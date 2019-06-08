@@ -7,6 +7,14 @@
 #include "CharacterInterface.h"
 #include "EnemyCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EEnemyState : uint8
+{
+	IDLE UMETA(DisplayName = "IDLE"),
+	MOVE UMETA(DisplayName = "MOVE"),
+	ATTACK UMETA(DisplayName = "ATTACK"),
+};
+
 UCLASS()
 class ACTIONGAME_API AEnemyCharacter : public ACharacter
 {
@@ -18,7 +26,11 @@ public:
 
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-		FCharacterStatus MyParam;
+	FCharacterStatus MyParam;
+
+	// キャラクターのステート
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	EEnemyState MyState;
 
 	// 攻撃中かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
@@ -30,11 +42,18 @@ public:
 
 protected:
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void EnemyAction();
+ 
 	// ジャンプ
 	void Jump();
 
 	// 移動できるかどうか返す
 	bool CanMove();
+
+	// HP
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
+	float CurrentHP;
 
 	// ダメージ処理
 	UFUNCTION(BlueprintCallable, Category = "Status")

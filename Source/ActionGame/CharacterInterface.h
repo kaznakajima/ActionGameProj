@@ -6,7 +6,6 @@
 #include "UObject/Interface.h"
 #include "CharacterInterface.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(BlueprintType)
 class ACTIONGAME_API UCharacterInterface : public UInterface
 {
@@ -40,7 +39,7 @@ struct FCharacterStatus
 	float Defence;
 };
 
-class ACTIONGAME_API ICharacterInterface
+class ICharacterInterface
 {
 	GENERATED_IINTERFACE_BODY()
 };
