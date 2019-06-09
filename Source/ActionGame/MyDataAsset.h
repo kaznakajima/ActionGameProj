@@ -31,6 +31,10 @@ public:
 	// ç”õ—Í
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Defence;
+
+	// UŒ‚”ÍˆÍ
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackRange;
 };
 
 USTRUCT(BlueprintType)
@@ -57,6 +61,10 @@ public:
 	// ç”õ—Í
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Defence;
+
+	// UŒ‚”ÍˆÍ
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackRange;
 };
 
 UCLASS()

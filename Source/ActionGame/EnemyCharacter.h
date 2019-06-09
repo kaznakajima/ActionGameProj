@@ -7,12 +7,21 @@
 #include "CharacterInterface.h"
 #include "EnemyCharacter.generated.h"
 
+// エネミーのステート
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
 {
-	IDLE UMETA(DisplayName = "IDLE"),
-	MOVE UMETA(DisplayName = "MOVE"),
-	ATTACK UMETA(DisplayName = "ATTACK"),
+	IDLE UMETA(DisplayName = "Idle"),
+	MOVE UMETA(DisplayName = "Move"),
+	ATTACK UMETA(DisplayName = "Attack")
+};
+
+// エネミーのタイプ(近距離、遠距離)
+UENUM(BlueprintType)
+enum class EEnemyType : uint8
+{
+	SHORT_RANGE UMETA(DisplayName = "Short"),
+	LONG_RANGE   UMETA(DisplayName = "Long")
 };
 
 UCLASS()
@@ -27,6 +36,10 @@ public:
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// キャラクターのタイプ
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	EEnemyType MyType;
 
 	// キャラクターのステート
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")

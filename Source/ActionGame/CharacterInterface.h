@@ -37,6 +37,10 @@ struct FCharacterStatus
 	// ç”õ—Í
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterStatus")
 	float Defence;
+
+	// UŒ‚”ÍˆÍ
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	float AttackRange;
 };
 
 class ICharacterInterface

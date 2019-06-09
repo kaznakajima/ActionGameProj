@@ -30,6 +30,7 @@ void UMyDataAsset::Import()
 		asset.HP = record->MaxHP;
 		asset.Attack = record->Power;
 		asset.Defence = record->Defence;
+		asset.AttackRange = record->AttackRange;
 
 		Data.Add(asset);
 	}
