@@ -191,6 +191,19 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+// ‹ó’†UŒ‚ˆ—
+void AActionGameCharacter::CheckFlyAttack(bool isAttack)
+{
+	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
+	if (isAttack) {
+		MyCharacterMovement->GravityScale = 0.0f;
+		MyCharacterMovement->Velocity = FVector(0.0f, 0.0f, 0.0f);
+	}
+	else {
+		MyCharacterMovement->GravityScale = 1.0f;
+	}
+}
+
 // ‰ñ”ğˆ—
 void AActionGameCharacter::AvoidAction()
 {

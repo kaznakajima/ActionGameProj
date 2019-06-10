@@ -13,4 +13,5 @@ UCLASS()
 class ACTIONGAME_API UMyCharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
+public:
 };

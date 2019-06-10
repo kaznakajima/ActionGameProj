@@ -97,6 +97,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
 
+	// ‹ó’†UŒ‚ˆ—
+	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
+	void CheckFlyAttack(bool isAttack);
+
 	// ‰ñ”ğˆ—
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidAction();
