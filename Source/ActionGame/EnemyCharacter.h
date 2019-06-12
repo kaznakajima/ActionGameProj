@@ -11,9 +11,10 @@
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
 {
-	IDLE UMETA(DisplayName = "Idle"),
-	MOVE UMETA(DisplayName = "Move"),
-	ATTACK UMETA(DisplayName = "Attack")
+	IDLE UMETA(DisplayName = "IDLE"),
+	PATOROL UMETA(DisplayName = "PATROL"),
+	MOVE UMETA(DisplayName = "MOVE"),
+	ATTACK UMETA(DisplayName = "ATTACK")
 };
 
 // エネミーのタイプ(近距離、遠距離)
