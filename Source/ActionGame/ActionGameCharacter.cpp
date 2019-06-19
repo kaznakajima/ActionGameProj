@@ -118,6 +118,7 @@ void AActionGameCharacter::MoveForward(float Value)
 		if (CanMove() == false) return;
 
 		AddMovementInput(Direction, Value);
+		MakeNoise(1, this, GetActorLocation());
 	}
 }
 
@@ -142,6 +143,7 @@ void AActionGameCharacter::MoveRight(float Value)
 		if (CanMove() == false) return;
 
 		AddMovementInput(Direction, Value);
+		MakeNoise(1, this, GetActorLocation());
 	}
 }
 
