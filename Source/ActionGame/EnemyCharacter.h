@@ -54,10 +54,25 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool Damaging;
 
+	// プレイヤーを補足しているか
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	bool IsSerch;
+
+	// ターゲットActor
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	AActor* TargetActor;
+
 protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void EnemyAction();
+
+	// ターゲット検知
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void BeginSerch(AActor* _actor);
+	// ターゲットロスト
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void SerchLost();
  
 	// ジャンプ
 	void Jump();
