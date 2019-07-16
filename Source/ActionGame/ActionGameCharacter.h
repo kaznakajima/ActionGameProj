@@ -33,6 +33,10 @@ public:
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+	
+	// 死亡判定
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+		bool IsDeath;
 
 	// 攻撃中かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CharacterParam")
@@ -48,35 +52,24 @@ public:
 
 protected:
 
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
+	// 死亡イベント
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void PlayerDeath();
 
-	/** Called for forwards/backward input */
+	// 前後移動
 	void MoveForward(float Value);
 
-	/** Called for side to side input */
+	// 左右移動
 	void MoveRight(float Value);
 
 	// ジャンプ
 	void Jump();
 
-	/** 
-	 * Called via input to turn at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
+	// 左右視点変更
 	void TurnAtRate(float Rate);
 
-	/**
-	 * Called via input to turn look up/down at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
+	// 上下視点変更
 	void LookUpAtRate(float Rate);
-
-	/** Handler for when a touch input begins. */
-	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
-
-	/** Handler for when a touch input stops. */
-	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
 	// ダッシュ攻撃ができるかどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")

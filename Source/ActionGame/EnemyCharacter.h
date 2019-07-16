@@ -46,6 +46,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	EEnemyState MyState;
 
+	// 死亡判定
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	bool IsDeath;
+
 	// 攻撃中かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool Attacking;
@@ -66,6 +70,10 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void EnemyAction();
+
+	// 死亡イベント
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void EnemyDeath();
 
 	// ターゲット検知
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")

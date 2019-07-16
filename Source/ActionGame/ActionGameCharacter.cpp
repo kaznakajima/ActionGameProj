@@ -60,29 +60,6 @@ void AActionGameCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("TurnRate", this, &AActionGameCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AActionGameCharacter::LookUpAtRate);
-
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AActionGameCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AActionGameCharacter::TouchStopped);
-
-	// VRのセットアップ
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AActionGameCharacter::OnResetVR);
-}
-
-
-void AActionGameCharacter::OnResetVR()
-{
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void AActionGameCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-	bPressedJump = true;
-}
-
-void AActionGameCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-	bPressedJump = false;
 }
 
 void AActionGameCharacter::TurnAtRate(float Rate)
@@ -220,7 +197,8 @@ void AActionGameCharacter::AvoidAction()
 		// 摩擦を無視
 		GetCharacterMovement()->GroundFriction = 0.0f;
 		// コリジョン無効化
-		GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+		GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+		//GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		// ダッシュ
 		AvoidDash();
 	}
@@ -234,7 +212,8 @@ void AActionGameCharacter::AvoidCancel()
 	// 摩擦を戻す
 	GetCharacterMovement()->GroundFriction = 8.0f;
 	// コリジョン有効化
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
+	//GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 	// Timerの再設定
 	GetWorld()->GetTimerManager().ClearTimer(TimeHandle);
 
