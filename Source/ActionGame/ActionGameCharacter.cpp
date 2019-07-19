@@ -92,7 +92,7 @@ void AActionGameCharacter::MoveForward(float Value)
 		InputVec.X = Value;
 
 		// 移動可能でないならリターン
-		if (CanMove() == false) return;
+		if (CanMove() == false || IsDeath) return;
 
 		AddMovementInput(Direction, Value);
 		MakeNoise(1, this, GetActorLocation());
@@ -117,7 +117,7 @@ void AActionGameCharacter::MoveRight(float Value)
 		InputVec.Y = Value;
 
 		// 移動可能でないならリターン
-		if (CanMove() == false) return;
+		if (CanMove() == false || IsDeath) return;
 
 		AddMovementInput(Direction, Value);
 		MakeNoise(1, this, GetActorLocation());
