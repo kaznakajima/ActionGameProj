@@ -7,6 +7,14 @@
 #include "CharacterInterface.h"
 #include "BossCharacter.generated.h"
 
+// エネミーのステート
+UENUM(BlueprintType)
+enum class EBossState : uint8
+{
+	PATOROL UMETA(DisplayName = "PATROL"),
+	BATTLE UMETA(DisplayName = "BATTLE"),
+};
+
 UCLASS()
 class ACTIONGAME_API ABossCharacter : public ACharacter
 {
@@ -19,6 +27,10 @@ public:
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// ボスのステート
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ChracterParam")
+	EBossState MyState;
 
 	// 死亡判定
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
@@ -35,6 +47,10 @@ public:
 	// プレイヤーを補足しているか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool IsSerch;
+	
+	// ターゲットActor
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	AActor* TargetActor;
 
 protected:
 	// Called when the game starts or when spawned
