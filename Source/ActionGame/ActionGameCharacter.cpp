@@ -126,7 +126,7 @@ void AActionGameCharacter::MoveRight(float Value)
 
 void AActionGameCharacter::Jump()
 {
-	if (Avoiding) AvoidCancel();
+	if (Avoiding) return;
 	bPressedJump = true;
 	JumpKeyHoldTime = 0.0f;
 }
