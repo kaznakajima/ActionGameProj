@@ -71,6 +71,10 @@ protected:
 	// 上下視点変更
 	void LookUpAtRate(float Rate);
 
+	// ダメージ処理
+	UFUNCTION(BlueprintCallable, Category = "Camera")
+	void CameraReset();
+
 	// ダッシュ攻撃ができるかどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool CanDashAttack;

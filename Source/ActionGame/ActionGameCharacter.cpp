@@ -74,6 +74,12 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+// カメラ視点のリセット
+void AActionGameCharacter::CameraReset()
+{
+
+}
+
 // 前後移動
 void AActionGameCharacter::MoveForward(float Value)
 {
