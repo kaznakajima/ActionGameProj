@@ -64,20 +64,20 @@ void AActionGameCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 void AActionGameCharacter::TurnAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
+	// 左右回転
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AActionGameCharacter::LookUpAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
+	// 上下回転
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 // カメラ視点のリセット
 void AActionGameCharacter::CameraReset()
 {
-
+	
 }
 
 // 前後移動
@@ -132,7 +132,7 @@ void AActionGameCharacter::MoveRight(float Value)
 
 void AActionGameCharacter::Jump()
 {
-	if (Avoiding) return;
+	if (Avoiding || IsDeath) return;
 	bPressedJump = true;
 	JumpKeyHoldTime = 0.0f;
 }
