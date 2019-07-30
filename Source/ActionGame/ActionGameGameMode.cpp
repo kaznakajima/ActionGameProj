@@ -6,10 +6,5 @@
 
 AActionGameGameMode::AActionGameGameMode()
 {
-	// デフォルトのキャラクターを設定
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Character/Player/BP_PlayerCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+
 }

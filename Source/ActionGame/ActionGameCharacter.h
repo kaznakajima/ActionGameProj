@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CharacterInterface.h"
+#include "ActionGameGameMode.h"
 #include "ActionGameCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -33,10 +34,14 @@ public:
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// 有効かどうか
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	bool IsActive;
 	
 	// 死亡判定
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-		bool IsDeath;
+	bool IsDeath;
 
 	// 攻撃中かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CharacterParam")

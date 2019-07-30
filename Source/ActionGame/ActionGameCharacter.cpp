@@ -40,6 +40,8 @@ AActionGameCharacter::AActionGameCharacter(const FObjectInitializer& ObjectIniti
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); 
 	FollowCamera->bUsePawnControlRotation = false;
+
+	IsActive = true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -141,7 +143,7 @@ void AActionGameCharacter::Jump()
 bool AActionGameCharacter::CanMove()
 {
 	// UŒ‚’†‚©‰ñ”ğ’†‚©ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚éê‡‚Ífalse
-	if (Attacking || Avoiding || Damaging) return false;
+	if (Attacking || Avoiding || Damaging || IsActive == false) return false;
 
 	// ‰½‚à‚µ‚Ä‚¢‚È‚¢‚È‚çtrue
 	return true;

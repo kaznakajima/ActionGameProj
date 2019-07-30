@@ -12,6 +12,9 @@ class AActionGameGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GameFlg")
+	bool IsGame;
+
 	AActionGameGameMode();
 };
 
