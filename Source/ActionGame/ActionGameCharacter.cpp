@@ -76,6 +76,12 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+// 自身の位置を初期位置に
+void AActionGameCharacter::InitPosition()
+{
+	SetActorLocation(InitPos);
+}
+
 // カメラ視点のリセット
 void AActionGameCharacter::CameraReset()
 {
@@ -206,7 +212,6 @@ void AActionGameCharacter::AvoidAction()
 		GetCharacterMovement()->GroundFriction = 0.0f;
 		// コリジョン無効化
 		GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-		//GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		// ダッシュ
 		AvoidDash();
 	}
@@ -221,20 +226,8 @@ void AActionGameCharacter::AvoidCancel()
 	GetCharacterMovement()->GroundFriction = 8.0f;
 	// コリジョン有効化
 	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
-	//GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 	// Timerの再設定
 	GetWorld()->GetTimerManager().ClearTimer(TimeHandle);
-
-	// 空中判定
-	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
-	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
-
-	// 空中の状態ならリターン
-	if (IsAir) { 
-		// Timerのセット
-		GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false); 
-		return; 
-	}
 
 	// 通常状態へ
 	Avoiding = false;

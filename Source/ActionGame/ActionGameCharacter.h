@@ -76,7 +76,11 @@ protected:
 	// 上下視点変更
 	void LookUpAtRate(float Rate);
 
-	// ダメージ処理
+	// 自身の位置を初期位置に
+	UFUNCTION(BlueprintCallable, Category = "CharacterPos")
+	void InitPosition();
+
+	// カメラ視点のリセット
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 	void CameraReset();
 
@@ -110,6 +114,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidCancel();
 
+	// 自身の初期位置
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	FVector InitPos;
 	// ダッシュ方向ベクター
 	UPROPERTY()
 	FVector DashVec;

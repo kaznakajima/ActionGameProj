@@ -65,7 +65,6 @@ public:
 	// ターゲットActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	AActor* TargetActor;
-
 protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")

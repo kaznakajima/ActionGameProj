@@ -32,6 +32,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ChracterParam")
 	EBossState MyState;
 
+	// アクティブかどうか
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	bool IsActive;
+
 	// 死亡判定
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool IsDeath;
