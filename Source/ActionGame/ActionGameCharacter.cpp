@@ -41,7 +41,7 @@ AActionGameCharacter::AActionGameCharacter(const FObjectInitializer& ObjectIniti
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); 
 	FollowCamera->bUsePawnControlRotation = false;
 
-	IsActive = true;
+	IsActive = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -140,9 +140,10 @@ void AActionGameCharacter::MoveRight(float Value)
 
 void AActionGameCharacter::Jump()
 {
-	if (Avoiding || IsDeath) return;
-	bPressedJump = true;
-	JumpKeyHoldTime = 0.0f;
+	if (IsActive && Avoiding == false && Damaging == false && Attacking == false) {
+		bPressedJump = true;
+		JumpKeyHoldTime = 0.0f;
+	}
 }
 
 // ˆÚ“®‰Â”\‚©‚Ç‚¤‚©•Ô‚·
