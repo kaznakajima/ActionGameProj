@@ -259,6 +259,7 @@ void AActionGameCharacter::AvoidDash()
 	}
 
 	// ダッシュ開始
+	DashVec.Z = -1.0f;
 	LaunchCharacter(DashVec * 3000.0f, true, true);
 	// Timerのセット
 	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false);
