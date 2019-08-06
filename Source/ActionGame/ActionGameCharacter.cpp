@@ -186,16 +186,23 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 }
 
 // ‹ó’†UŒ‚ˆ—
-void AActionGameCharacter::CheckFlyAttack(bool isAttack)
+bool AActionGameCharacter::CheckFlyAttack()
 {
 	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
-	if (isAttack) {
+	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
+
+	// ‹ó’†UŒ‚‚ª‚·‚Å‚És‚í‚ê‚Ä‚¢‚È‚¢ê‡Às(‹ó’†UŒ‚‚ÍŒ´‘¥1‰ñ)
+	if (IsAir && AirAttackCount < 3) {
 		MyCharacterMovement->GravityScale = 0.0f;
 		MyCharacterMovement->Velocity = FVector(0.0f, 0.0f, 0.0f);
+		AirAttackCount++;
+		return true;
 	}
-	else {
+	else if(AirAttackCount >= 3) {
 		MyCharacterMovement->GravityScale = 1.0f;
+		return false;
 	}
+	return true;
 }
 
 // ‰ñ”ğˆ—

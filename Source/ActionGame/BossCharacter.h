@@ -13,6 +13,7 @@ enum class EBossState : uint8
 {
 	PATOROL UMETA(DisplayName = "PATROL"),
 	BATTLE UMETA(DisplayName = "BATTLE"),
+	LONGBATTLE UMETA(DisplayName = "LONGRANGE")
 };
 
 UCLASS()

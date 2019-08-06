@@ -104,8 +104,8 @@ protected:
 	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
 
 	// 空中攻撃処理
-	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
-	void CheckFlyAttack(bool isAttack);
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerAction")
+	bool CheckFlyAttack();
 
 	// 回避処理
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
@@ -117,6 +117,9 @@ protected:
 	// 自身の初期位置
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FVector InitPos;
+	// 空中攻撃回数
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	int AirAttackCount;
 	// ダッシュ方向ベクター
 	UPROPERTY()
 	FVector DashVec;
