@@ -103,7 +103,23 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
 
-	// 空中攻撃処理
+	// 攻撃時に自動ターゲットをするか
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerAction")
+	bool CheckTargetForcus();
+
+	// 入力方向に攻撃を行う
+	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
+	void AttackDirectionForcus();
+
+	// 入力方向ベクターを返す
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "CharacterParam")
+	FVector GetInputVector();
+
+	// 空中攻撃中止
+	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
+	void CancelFlyAttack();
+
+	// 空中攻撃判定
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerAction")
 	bool CheckFlyAttack();
 
@@ -123,8 +139,11 @@ protected:
 	// ダッシュ方向ベクター
 	UPROPERTY()
 	FVector DashVec;
-	// 入力方向ベクター
+	// 攻撃方向ベクター
 	UPROPERTY()
+	FVector AttackVec;
+	// 入力方向ベクター
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterParam")
 	FVector InputVec;
 	// Timerを管理する変数
 	UPROPERTY()

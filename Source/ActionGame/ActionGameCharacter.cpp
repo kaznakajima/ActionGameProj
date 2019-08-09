@@ -138,9 +138,12 @@ void AActionGameCharacter::MoveRight(float Value)
 	}
 }
 
+// ジャンプ処理
 void AActionGameCharacter::Jump()
 {
-	if (IsActive && Avoiding == false && Damaging == false && Attacking == false) {
+	// ジャンプに制限を付ける
+	if (IsActive && Avoiding == false 
+		&& Damaging == false && Attacking == false && IsDeath == false) {
 		bPressedJump = true;
 		JumpKeyHoldTime = 0.0f;
 	}
@@ -185,10 +188,47 @@ void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, c
 	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+// 攻撃時に自動ターゲットをするかどうか
+bool AActionGameCharacter::CheckTargetForcus()
+{
+	if (InputVec == FVector::ZeroVector) return true;
+
+	return false;
+}
+
+// 入力方向に攻撃を行う
+void AActionGameCharacter::AttackDirectionForcus()
+{
+	AttackVec = GetInputVector();
+	AttackVec.Normalize();
+
+	FRotator myRotate = AttackVec.Rotation();
+	SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
+}
+
+// 入力方向を返す
+FVector AActionGameCharacter::GetInputVector()
+{
+	// 現在の方向の取得
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// 方向ベクターの取得
+	const FVector DirectionY = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y) * InputVec.Y;
+	const FVector DirectionX = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * InputVec.X;
+
+	// ここに入力方向を格納する
+	const FVector Vec = DirectionX + DirectionY;
+
+	return Vec;
+}
+
 // 空中攻撃処理
 bool AActionGameCharacter::CheckFlyAttack()
 {
+	// 自身のMovementを取得
 	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
+	// 落下しているかどうか
 	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
 
 	// 空中攻撃がすでに行われていない場合実行(空中攻撃は原則1回)
@@ -199,10 +239,21 @@ bool AActionGameCharacter::CheckFlyAttack()
 		return true;
 	}
 	else if(AirAttackCount >= 3) {
-		MyCharacterMovement->GravityScale = 1.0f;
+		CancelFlyAttack();
 		return false;
 	}
 	return true;
+}
+
+// 空中攻撃中止
+void AActionGameCharacter::CancelFlyAttack()
+{
+	// 自身のMovementを取得
+	UCharacterMovementComponent* MyCharacterMovement = GetCharacterMovement();
+	// 落下しているかどうか
+	bool IsAir = (MyCharacterMovement->MovementMode == EMovementMode::MOVE_Falling);
+	if(IsAir == false) AirAttackCount = 0;
+	MyCharacterMovement->GravityScale = 1.0f;
 }
 
 // 回避処理
@@ -244,20 +295,12 @@ void AActionGameCharacter::AvoidCancel()
 // 回避時のダッシュ
 void AActionGameCharacter::AvoidDash()
 {
-	// 現在の方向の取得
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// 方向ベクターの取得
-	const FVector DirectionY = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y) * InputVec.Y;
-	const FVector DirectionX = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * InputVec.X;
-
 	// 入力状態によってダッシュの方向を決定
 	// 入力がない場合、前方方向にダッシュ
 	if(InputVec.X == 0 && InputVec.Y == 0) DashVec = GetCapsuleComponent()->GetForwardVector();
 	// 入力がある場合、入力方向にダッシュ
 	else if (InputVec.X != 0 || InputVec.Y != 0) {
-		DashVec = DirectionY + DirectionX;
+		DashVec = GetInputVector();
 		DashVec.Normalize();
 
 		// 目標の方向を取得

@@ -25,6 +25,9 @@ enum class EEnemyType : uint8
 	LONG_RANGE   UMETA(DisplayName = "Long")
 };
 
+// 動的マルチキャストデリゲート(イベントディスパッチャー)の宣言
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyOnEventDispather, float, Delation, float, Interval);
+
 UCLASS()
 class ACTIONGAME_API AEnemyCharacter : public ACharacter
 {
@@ -33,6 +36,10 @@ class ACTIONGAME_API AEnemyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter(const FObjectInitializer& ObjectInitilizer);
+
+	// 動的マルチキャストデリゲート(イベントディスパッチャー)の定義
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Event")
+	FEnemyOnEventDispather OnHitStop;
 
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
