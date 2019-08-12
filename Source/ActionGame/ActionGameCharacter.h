@@ -80,10 +80,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "CharacterPos")
 	void InitPosition();
 
-	// カメラ視点のリセット
-	UFUNCTION(BlueprintCallable, Category = "Camera")
-	void CameraReset();
-
 	// ダッシュ攻撃ができるかどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	bool CanDashAttack;

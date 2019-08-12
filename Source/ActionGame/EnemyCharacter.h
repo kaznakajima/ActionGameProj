@@ -74,8 +74,13 @@ public:
 	AActor* TargetActor;
 protected:
 
+	// 敵のアクションイベント(攻撃)
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void EnemyAction();
+
+	// 敵のアクション準備イベント(攻撃準備)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
+	void EnemyPreparationAction();
 
 	// 死亡イベント
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")

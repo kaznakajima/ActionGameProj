@@ -64,14 +64,22 @@ void AActionGameCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AActionGameCharacter::LookUpAtRate);
 }
 
+// キャラクターの回転
 void AActionGameCharacter::TurnAtRate(float Rate)
 {
+	// 有効でないならリターン
+	if (IsActive == false) return;
+
 	// 左右回転
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
+// キャラクターの回転
 void AActionGameCharacter::LookUpAtRate(float Rate)
 {
+	// 有効でないならリターン
+	if (IsActive == false) return;
+
 	// 上下回転
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
@@ -80,12 +88,6 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 void AActionGameCharacter::InitPosition()
 {
 	SetActorLocation(InitPos);
-}
-
-// カメラ視点のリセット
-void AActionGameCharacter::CameraReset()
-{
-	
 }
 
 // 前後移動
