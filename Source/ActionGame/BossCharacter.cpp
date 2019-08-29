@@ -55,17 +55,3 @@ void ABossCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, class U
 	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-// Called when the game starts or when spawned
-void ABossCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ABossCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

@@ -6,10 +6,10 @@
 #include "UObject/Interface.h"
 #include "CharacterInterface.generated.h"
 
-UINTERFACE(BlueprintType)
+UINTERFACE()
 class ACTIONGAME_API UCharacterInterface : public UInterface
 {
-	GENERATED_BODY()
+	GENERATED_UINTERFACE_BODY()
 };
 
 // キャラクターのステータス
@@ -43,7 +43,22 @@ struct FCharacterStatus
 	float AttackRange;
 };
 
-class ICharacterInterface
+// キャラクターインターフェース
+class ACTIONGAME_API ICharacterInterface
 {
 	GENERATED_IINTERFACE_BODY()
+		
+public:
+
+	// コリジョン有効化
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "InterfaceAction")
+	void OnUseCollision(class UPrimitiveComponent* Col);
+
+	// コリジョン無効化
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "InterfaceAction")
+	void OnUnUseCollision(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2);
+
+	// ダメージ処理
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "InterfaceAction")
+	void OnDamage(AActor* actor, float defence);
 };

@@ -88,6 +88,10 @@ void AActionGameCharacter::LookUpAtRate(float Rate)
 void AActionGameCharacter::InitPosition()
 {
 	SetActorLocation(InitPos);
+
+	// 向きもリセット
+	FRotator myRotate(0, -180, 0);
+	SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
 }
 
 // 前後移動
@@ -161,35 +165,6 @@ bool AActionGameCharacter::CanMove()
 	return true;
 }
 
-// ダメージ処理
-void AActionGameCharacter::GiveDamage(AActor* actor, float defence)
-{
-	AController* PlayerController = GetController();
-
-	// ダメージ計算
-	float damage = MyParam.Power - defence;
-
-	// ダメージイベントの取得
-	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-	FDamageEvent DamageEvent(ValidDamageTypeClass);
-
-	// ダメージ処理
-	actor->TakeDamage(damage, DamageEvent, PlayerController, this);
-}
-
-// コリジョン有効化
-void AActionGameCharacter::UseCollision(class UPrimitiveComponent* boxCol)
-{
-	boxCol->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-}
-
-// コリジョン無効化
-void AActionGameCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2)
-{
-	boxCol_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-}
-
 // 攻撃時に自動ターゲットをするかどうか
 bool AActionGameCharacter::CheckTargetForcus()
 {
@@ -201,9 +176,11 @@ bool AActionGameCharacter::CheckTargetForcus()
 // 入力方向に攻撃を行う
 void AActionGameCharacter::AttackDirectionForcus()
 {
+	// 入力方向を取得
 	AttackVec = GetInputVector();
 	AttackVec.Normalize();
 
+	// 入力方向から向きを取得
 	FRotator myRotate = AttackVec.Rotation();
 	SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
 }
@@ -315,4 +292,32 @@ void AActionGameCharacter::AvoidDash()
 	LaunchCharacter(DashVec * 3000.0f, true, true);
 	// Timerのセット
 	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false);
+}
+
+void AActionGameCharacter::OnDamage_Implementation(AActor* actor, float defence)
+{
+	AController* PlayerController = GetController();
+
+	// ダメージ計算
+	float damage = MyParam.Power - defence;
+
+	// ダメージイベントの取得
+	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+	FDamageEvent DamageEvent(ValidDamageTypeClass);
+
+	// ダメージ処理
+	actor->TakeDamage(damage, DamageEvent, PlayerController, this);
+}
+
+// コリジョン有効化
+void AActionGameCharacter::OnUseCollision_Implementation(class UPrimitiveComponent* Col)
+{
+	if(Col != nullptr) Col->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
+// コリジョン無効化
+void AActionGameCharacter::OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2)
+{
+	if(Col_1 != nullptr) Col_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if(Col_2 != nullptr)Col_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

@@ -73,13 +73,16 @@ class ACTIONGAME_API UMyDataAsset : public UDataAsset
 	GENERATED_BODY()
 public:
 #if WITH_EDITORONLY_DATA
+	    // データテーブル
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "EditData")
 		UDataTable* DataTable;
 #endif
+	// テーブルをインポートする
 	UFUNCTION(meta = (CallInEditor = "true"))
-		void Import();
+	void Import();
 
+	// データリスト
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TArray<FMyDataAssetRecord> Data;
+	TArray<FMyDataAssetRecord> Data;
 
 };

@@ -5,35 +5,45 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CharacterInterface.h"
-#include "ActionGameGameMode.h"
 #include "ActionGameCharacter.generated.h"
 
 UCLASS(config=Game)
-class AActionGameCharacter : public ACharacter
+class AActionGameCharacter : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
+	// SpringArmの定義
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-	/** Follow camera */
+	// カメラの定義
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 public:
+
+	// コンストラクタ
 	AActionGameCharacter(const FObjectInitializer& ObjectInitilizer);
 
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	// 左右回転
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
 
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	// 上下回転
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// ダメージイベント
+	void OnDamage_Implementation(AActor* actor, float defence) override;
+
+	// コリジョン有効化
+	void OnUseCollision_Implementation(class UPrimitiveComponent* Col) override;
+
+	// コリジョン無効化
+	void OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2) override;
 
 	// 有効かどうか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
@@ -87,18 +97,6 @@ protected:
 	// 移動できるかどうか返す
 	bool CanMove();
 
-	// ダメージ処理
-	UFUNCTION(BlueprintCallable, Category = "Status")
-	void GiveDamage(AActor* actor, float defence);
-
-	// 攻撃判定用コリジョン有効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UseCollision(class UPrimitiveComponent* boxCol);
-
-	// 攻撃判定用コリジョン無効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
-
 	// 攻撃時に自動ターゲットをするか
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerAction")
 	bool CheckTargetForcus();
@@ -122,6 +120,9 @@ protected:
 	// 回避処理
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidAction();
+	// 回避時のダッシュ
+	UFUNCTION()
+	void AvoidDash();
 	// 回避のキャンセル
 	UFUNCTION(BlueprintCallable, Category = "PlayerAction")
 	void AvoidCancel();
@@ -139,22 +140,25 @@ protected:
 	UPROPERTY()
 	FVector AttackVec;
 	// 入力方向ベクター
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterParam")
+	UPROPERTY()
 	FVector InputVec;
 	// Timerを管理する変数
 	UPROPERTY()
 	FTimerHandle TimeHandle;
-	// 回避時のダッシュ
-	UFUNCTION()
-	void AvoidDash();
+	
+	// 現在のHP
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
+	float CurrentHP;
 
 protected:
+
+	// 入力情報のセットアップ
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	/** Returns CameraBoom subobject **/
+	// SpringArmを返す
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
+	// カメラを返す
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
 

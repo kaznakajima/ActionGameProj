@@ -8,7 +8,7 @@
 #include "MyCharacterMovementComponent.h"
 #include "Engine.h"
 
-// Sets default values
+// コンストラクタ
 AEnemyCharacter::AEnemyCharacter(const FObjectInitializer& ObjectInitilizer)
 	: Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName))
 {
@@ -27,12 +27,6 @@ AEnemyCharacter::AEnemyCharacter(const FObjectInitializer& ObjectInitilizer)
 	GetCharacterMovement()->AirControl = 0.2f;
 }
 
-void AEnemyCharacter::Jump()
-{
-	bPressedJump = true;
-	JumpKeyHoldTime = 0.0f;
-}
-
 // 移動可能かどうか返す
 bool AEnemyCharacter::CanMove()
 {
@@ -43,8 +37,8 @@ bool AEnemyCharacter::CanMove()
 	return true;
 }
 
-// ダメージ処理
-void AEnemyCharacter::GiveDamage(AActor* actor, float defence)
+// ダメージイベント
+void AEnemyCharacter::OnDamage_Implementation(AActor* actor, float defence)
 {
 	AController* PlayerController = GetController();
 
@@ -60,15 +54,14 @@ void AEnemyCharacter::GiveDamage(AActor* actor, float defence)
 }
 
 // コリジョン有効化
-void AEnemyCharacter::UseCollision(class UPrimitiveComponent* boxCol)
+void AEnemyCharacter::OnUseCollision_Implementation(class UPrimitiveComponent* Col)
 {
-	boxCol->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	if (Col != nullptr) Col->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 // コリジョン無効化
-void AEnemyCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2)
+void AEnemyCharacter::OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2)
 {
-	boxCol_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (Col_1 != nullptr) Col_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (Col_2 != nullptr)Col_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
-

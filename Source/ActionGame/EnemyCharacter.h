@@ -29,12 +29,12 @@ enum class EEnemyType : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyOnEventDispather, float, Delation, float, Interval);
 
 UCLASS()
-class ACTIONGAME_API AEnemyCharacter : public ACharacter
+class ACTIONGAME_API AEnemyCharacter : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	// コンストラクタ
 	AEnemyCharacter(const FObjectInitializer& ObjectInitilizer);
 
 	// 動的マルチキャストデリゲート(イベントディスパッチャー)の定義
@@ -44,6 +44,15 @@ public:
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// ダメージイベント
+	void OnDamage_Implementation(AActor* actor, float defence) override;
+
+	// コリジョン有効化
+	void OnUseCollision_Implementation(class UPrimitiveComponent* Col) override;
+
+	// コリジョン無効化
+	void OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2) override;
 
 	// キャラクターのタイプ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
@@ -92,9 +101,6 @@ protected:
 	// ターゲットロスト
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void SerchLost();
- 
-	// ジャンプ
-	void Jump();
 
 	// 移動できるかどうか返す
 	bool CanMove();
@@ -102,20 +108,4 @@ protected:
 	// HP
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
 	float CurrentHP;
-
-	// ダメージ処理
-	UFUNCTION(BlueprintCallable, Category = "Status")
-	void GiveDamage(AActor* actor, float defence);
-
-	// 攻撃判定用コリジョン有効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UseCollision(class UPrimitiveComponent* boxCol);
-
-	// 攻撃判定用コリジョン無効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
-
-	// Timerを管理する変数
-	UPROPERTY()
-	FTimerHandle TimeHandle;
 };

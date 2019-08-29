@@ -58,8 +58,6 @@ public:
 	AActor* TargetActor;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void EnemyAction();
@@ -90,9 +88,5 @@ protected:
 	// UŒ‚”»’è—pƒRƒŠƒWƒ‡ƒ“–³Œø‰»
 	UFUNCTION(BlueprintCallable, Category = "Collision")
 	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };
