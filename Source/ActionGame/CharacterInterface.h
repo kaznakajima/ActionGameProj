@@ -61,4 +61,12 @@ public:
 	// ダメージ処理
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "InterfaceAction")
 	void OnDamage(AActor* actor, float defence);
+
+	// それぞれのアクションイベント
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Action")
+	void CharacterAction();
+
+	// 死亡イベント
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Action")
+	void DeathAction();
 };
