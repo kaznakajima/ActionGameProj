@@ -17,17 +17,26 @@ enum class EBossState : uint8
 };
 
 UCLASS()
-class ACTIONGAME_API ABossCharacter : public ACharacter
+class ACTIONGAME_API ABossCharacter : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	// コンストラクタ
 	ABossCharacter(const FObjectInitializer& ObjectInitilizer);
 
 	// キャラクターステータス
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	FCharacterStatus MyParam;
+
+	// ダメージイベント
+	void OnDamage_Implementation(AActor* actor, float defence) override;
+
+	// コリジョン有効化
+	void OnUseCollision_Implementation(class UPrimitiveComponent* Col) override;
+
+	// コリジョン無効化
+	void OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2) override;
 
 	// ボスのステート
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ChracterParam")
@@ -76,17 +85,5 @@ protected:
 	// HP
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
 	float CurrentHP;
-
-	// ダメージ処理
-	UFUNCTION(BlueprintCallable, Category = "Status")
-	void GiveDamage(AActor* actor, float defence);
-
-	// 攻撃判定用コリジョン有効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UseCollision(class UPrimitiveComponent* boxCol);
-
-	// 攻撃判定用コリジョン無効化
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2);
 
 };

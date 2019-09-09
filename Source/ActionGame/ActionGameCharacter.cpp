@@ -44,9 +44,7 @@ AActionGameCharacter::AActionGameCharacter(const FObjectInitializer& ObjectIniti
 	IsActive = false;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
+// 入力イベントのセットアップ
 void AActionGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// キー入力のセットアップ

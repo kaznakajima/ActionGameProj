@@ -8,6 +8,7 @@
 #include "MyCharacterMovementComponent.h"
 #include "Engine.h"
 
+// コンストラクタ
 ABossCharacter::ABossCharacter(const FObjectInitializer& ObjectInitilizer)
 	: Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName))
 {
@@ -27,7 +28,7 @@ ABossCharacter::ABossCharacter(const FObjectInitializer& ObjectInitilizer)
 }
 
 // ダメージ処理
-void ABossCharacter::GiveDamage(AActor* actor, float defence)
+void ABossCharacter::OnDamage_Implementation(AActor* actor, float defence)
 {
 	AController* PlayerController = GetController();
 
@@ -43,15 +44,15 @@ void ABossCharacter::GiveDamage(AActor* actor, float defence)
 }
 
 // コリジョン有効化
-void ABossCharacter::UseCollision(class UPrimitiveComponent* boxCol)
+void ABossCharacter::OnUseCollision_Implementation(class UPrimitiveComponent* Col)
 {
-	boxCol->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	if(Col != nullptr) Col->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 // コリジョン無効化
-void ABossCharacter::UnUseCollision(class UPrimitiveComponent* boxCol_1, class UPrimitiveComponent* boxCol_2)
+void ABossCharacter::OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2)
 {
-	boxCol_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	boxCol_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if(Col_1 != nullptr) Col_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if(Col_2 != nullptr) Col_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
