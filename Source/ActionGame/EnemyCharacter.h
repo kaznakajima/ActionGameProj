@@ -81,11 +81,8 @@ public:
 	// ターゲットActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	AActor* TargetActor;
-protected:
 
-	// 敵のアクションイベント(攻撃)
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
-	void EnemyAction();
+protected:
 
 	// 敵のアクション準備イベント(攻撃準備)
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")

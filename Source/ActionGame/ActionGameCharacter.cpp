@@ -9,6 +9,7 @@
 #include "MyCharacterMovementComponent.h"
 #include "Engine.h"
 
+// コンストラクタ
 AActionGameCharacter::AActionGameCharacter(const FObjectInitializer& ObjectInitilizer) 
 	: Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName))
 {

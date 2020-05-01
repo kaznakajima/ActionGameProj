@@ -68,13 +68,6 @@ public:
 
 protected:
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
-	void EnemyAction();
-
-	// 死亡イベント
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
-	void EnemyDeath();
-
 	// ターゲット検知
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void BeginSerch(AActor* _actor);
