@@ -93,77 +93,6 @@ void AActionGameCharacter::InitPosition()
 	SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
 }
 
-// 前後移動
-void AActionGameCharacter::MoveForward(float Value)
-{
-	// 入力のAxisを格納
-	if (Value == 0.0f) InputVec.X = 0.0f;
-
-	if ((Controller != NULL) && (Value != 0.0f))
-	{
-		// 前後方向の取得
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// 前後方向ベクターを取得
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-		InputVec.X = Value;
-
-		// 移動可能でないならリターン
-		if (CanMove() == false || IsDeath) return;
-
-		AddMovementInput(Direction, Value);
-		MakeNoise(1, this, GetActorLocation());
-	}
-}
-
-// 左右移動
-void AActionGameCharacter::MoveRight(float Value)
-{
-	// 入力のAxisを格納
-	if (Value == 0.0f) InputVec.Y = 0.0f;
-
-	if ( (Controller != NULL) && (Value != 0.0f) )
-	{
-		// 左右方向の取得
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
-		// 左右方向ベクターの取得
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		InputVec.Y = Value;
-
-		// 移動可能でないならリターン
-		if (CanMove() == false || IsDeath) return;
-
-		AddMovementInput(Direction, Value);
-		MakeNoise(1, this, GetActorLocation());
-	}
-}
-
-// ジャンプ処理
-void AActionGameCharacter::Jump()
-{
-	// ジャンプに制限を付ける
-	if (IsActive && Avoiding == false 
-		&& Damaging == false && Attacking == false && IsDeath == false) {
-		bPressedJump = true;
-		JumpKeyHoldTime = 0.0f;
-	}
-}
-
-// 移動可能かどうか返す
-bool AActionGameCharacter::CanMove()
-{
-	// 攻撃中か回避中かダメージを受けている場合はfalse
-	if (Attacking || Avoiding || Damaging || IsActive == false) return false;
-
-	// 何もしていないならtrue
-	return true;
-}
-
 // 攻撃時に自動ターゲットをするかどうか
 bool AActionGameCharacter::CheckTargetForcus()
 {
@@ -291,32 +220,4 @@ void AActionGameCharacter::AvoidDash()
 	LaunchCharacter(DashVec * 3000.0f, true, true);
 	// Timerのセット
 	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false);
-}
-
-void AActionGameCharacter::OnDamage_Implementation(AActor* actor, float defence)
-{
-	AController* PlayerController = GetController();
-
-	// ダメージ計算
-	float damage = MyParam.Power - defence;
-
-	// ダメージイベントの取得
-	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-	FDamageEvent DamageEvent(ValidDamageTypeClass);
-
-	// ダメージ処理
-	actor->TakeDamage(damage, DamageEvent, PlayerController, this);
-}
-
-// コリジョン有効化
-void AActionGameCharacter::OnUseCollision_Implementation(class UPrimitiveComponent* Col)
-{
-	if(Col != nullptr) Col->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-}
-
-// コリジョン無効化
-void AActionGameCharacter::OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2)
-{
-	if(Col_1 != nullptr) Col_1->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	if(Col_2 != nullptr)Col_2->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

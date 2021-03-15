@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameCharacterBase.h"
 #include "CharacterInterface.h"
 #include "EnemyCharacter.generated.h"
 
@@ -29,7 +30,7 @@ enum class EEnemyType : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyOnEventDispather, float, Delation, float, Interval);
 
 UCLASS()
-class ACTIONGAME_API AEnemyCharacter : public ACharacter, public ICharacterInterface
+class ACTIONGAME_API AEnemyCharacter : public AGameCharacterBase
 {
 	GENERATED_BODY()
 
@@ -41,19 +42,6 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Event")
 	FEnemyOnEventDispather OnHitStop;
 
-	// キャラクターステータス
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-	FCharacterStatus MyParam;
-
-	// ダメージイベント
-	void OnDamage_Implementation(AActor* actor, float defence) override;
-
-	// コリジョン有効化
-	void OnUseCollision_Implementation(class UPrimitiveComponent* Col) override;
-
-	// コリジョン無効化
-	void OnUnUseCollision_Implementation(class UPrimitiveComponent* Col_1, class UPrimitiveComponent* Col_2) override;
-
 	// キャラクターのタイプ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	EEnemyType MyType;
@@ -61,18 +49,6 @@ public:
 	// キャラクターのステート
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterParam")
 	EEnemyState MyState;
-
-	// 死亡判定
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-	bool IsDeath;
-
-	// 攻撃中かどうか
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-	bool Attacking;
-
-	// ダメージを受けているか
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
-	bool Damaging;
 
 	// プレイヤーを補足しているか
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterParam")
@@ -98,11 +74,4 @@ protected:
 	// ターゲットロスト
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Action")
 	void SerchLost();
-
-	// 移動できるかどうか返す
-	bool CanMove();
-
-	// HP
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
-	float CurrentHP;
 };
