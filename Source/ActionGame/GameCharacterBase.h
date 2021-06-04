@@ -73,14 +73,6 @@ protected:
 	// ジャンプ
 	void Jump();
 
-	// SpringArmの定義
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
-
-	// カメラの定義
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FollowCamera;
-
 	// ダッシュ方向ベクター
 	UPROPERTY()
 		FVector DashVec;
@@ -104,10 +96,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// SpringArmを返す
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	// カメラを返す
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 };

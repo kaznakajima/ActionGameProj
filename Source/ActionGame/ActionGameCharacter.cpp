@@ -197,6 +197,8 @@ void AActionGameCharacter::AvoidCancel()
 
 	// 通常状態へ
 	Avoiding = false;
+
+	UE_LOG(LogTemp, Display, TEXT("AvoidCancel"));
 }
 
 // 回避時のダッシュ
@@ -204,7 +206,10 @@ void AActionGameCharacter::AvoidDash()
 {
 	// 入力状態によってダッシュの方向を決定
 	// 入力がない場合、前方方向にダッシュ
-	if(InputVec.X == 0 && InputVec.Y == 0) DashVec = GetCapsuleComponent()->GetForwardVector();
+	if (InputVec.X == 0 && InputVec.Y == 0) {
+		DashVec = GetCapsuleComponent()->GetForwardVector();
+		DashVec.Normalize();
+	}
 	// 入力がある場合、入力方向にダッシュ
 	else if (InputVec.X != 0 || InputVec.Y != 0) {
 		DashVec = GetInputVector();
@@ -213,11 +218,13 @@ void AActionGameCharacter::AvoidDash()
 		// 目標の方向を取得
 		FRotator myRotate = DashVec.Rotation();
 		SetActorRotation(myRotate, ETeleportType::TeleportPhysics);
+
+		DashVec = GetCapsuleComponent()->GetForwardVector();
+		DashVec.Normalize();
 	}
 
 	// ダッシュ開始
-	DashVec.Z = -1.0f;
-	LaunchCharacter(DashVec * 3000.0f, true, true);
-	// Timerのセット
-	GetWorld()->GetTimerManager().SetTimer(TimeHandle, this, &AActionGameCharacter::AvoidCancel, 0.2f, false);
+	DashVec.Z = -0.1f;
+	GetCharacterMovement()->Velocity = FVector(0, 0, GetCharacterMovement()->Velocity.Z);
+	LaunchCharacter(DashVec * 1500.0f, false, true);
 }

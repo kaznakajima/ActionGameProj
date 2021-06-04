@@ -10,38 +10,7 @@
 
 // Sets default values
 AGameCharacterBase::AGameCharacterBase(const FObjectInitializer& ObjectInitilizer) : 
-	Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName))
-{
-	// カプセルコリジョンの初期化
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-	// 回転力の初期化
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
-
-	// キャラクターの向きをカメラに影響されない
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
-	// CharacterMovementのセットアップ
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
-
-	// SpringArmのセットアップ
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f;
-	CameraBoom->bUsePawnControlRotation = true;
-
-	// カメラのセットアップ
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
-
-	IsActive = false;
+	Super(ObjectInitilizer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(CharacterMovementComponentName)) {
 }
 
 // Called when the game starts or when spawned
@@ -73,6 +42,9 @@ void AGameCharacterBase::MoveForward(float Value)
 
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		// 移動可能でないならリターン
+		if (CanMove() == false || IsDeath) return;
+
 		// 前後方向の取得
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -81,9 +53,6 @@ void AGameCharacterBase::MoveForward(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
 		InputVec.X = Value;
-
-		// 移動可能でないならリターン
-		if (CanMove() == false || IsDeath) return;
 
 		AddMovementInput(Direction, Value);
 		MakeNoise(1, this, GetActorLocation());
@@ -98,6 +67,9 @@ void AGameCharacterBase::MoveRight(float Value)
 
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		// 移動可能でないならリターン
+		if (CanMove() == false || IsDeath) return;
+
 		// 左右方向の取得
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -106,9 +78,6 @@ void AGameCharacterBase::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		InputVec.Y = Value;
-
-		// 移動可能でないならリターン
-		if (CanMove() == false || IsDeath) return;
 
 		AddMovementInput(Direction, Value);
 		MakeNoise(1, this, GetActorLocation());
